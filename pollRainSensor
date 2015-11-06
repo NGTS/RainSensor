@@ -1,0 +1,7 @@
+import Pyro4
+
+uri="PYRO:Pyro.NameServer@10.2.5.107:9090"
+rainSensor=Pyro4.Proxy(uri)
+
+rainSensor.poll_rain_sensor()
+
