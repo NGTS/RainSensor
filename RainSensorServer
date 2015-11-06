@@ -12,7 +12,7 @@ class RainSensor(object):
 
 	def poll_rain_sensor(self):
 		g.setmode(g.BCM)
-		gpio_nums=[2,3,4,17,27,22,10,9,11,5,6,13,19,26,20,21]
+		gpio_nums=[18,23,4,17,27,22,10,9,11,5,6,13,19,26,20,21]
 		for i in gpio_nums:
 			g.setup(i,g.IN)
 		for i in range(0,len(gpio_nums)):
