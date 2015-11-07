@@ -1,4 +1,4 @@
-# saved as rainSensor-server.py
+#!/usr/bin/python
 # start name server with
 # python -m Pyro4.naming -n 10.2.5.107
 

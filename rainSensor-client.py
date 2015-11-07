@@ -1,4 +1,4 @@
-# saved as greeting-client.py
+#!/usr/local/python/bin/python
 from datetime import datetime 
 import Pyro4, sys, time, pymysql, logging, getpass
 import argparse as ap
