@@ -9,6 +9,7 @@ def argParse():
 	parser.add_argument('--debug',help='run in debugging mode',action='store_true')
 	return parser.parse_args()
 
+# parse arguments
 args=argParse()
 
 # whoami?
@@ -32,22 +33,26 @@ else:
 # connect to RPi via Pyro	
 # use name server object lookup uri shortcut
 getRain = Pyro4.Proxy("PYRONAME:example.sensor")  
-rs=getRain.get_rain('test')
-if args.v:
-	print rs
 
-# generate time stamps
-bucket=(int(time.time())/60)*60
-tsample=datetime.utcnow().isoformat().replace('T',' ')[:-7] # remove microseconds
+# loop 'forever'
+while(1):
+	rs=getRain.get_rain('test')
+	if args.v:
+		print rs
 
-# update the database
-qry="REPLACE INTO rpi_rain_sensor (tsample,bucket,rs01,rs02,rs03,rs04,rs05,rs06,rs07,rs08,rs09,rs10,rs11,rs12,rs13,rs14,rs15,rs16) VALUES ('%s',%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d)" % (tsample,bucket,rs[1],rs[2],rs[3],rs[4],rs[5],rs[6],rs[7],rs[8],rs[9],rs[10],rs[11],rs[12],rs[13],rs[14],rs[15],rs[16])
-if args.v:
-	print qry
+	# generate time stamps
+	bucket=(int(time.time())/60)*60
+	tsample=datetime.utcnow().isoformat().replace('T',' ')[:-7] # remove microseconds
 
-if not args.debug:
-	cur.execute(qry)
-	conn.commit()
+	# update the database
+	qry="REPLACE INTO rpi_rain_sensor (tsample,bucket,rs01,rs02,rs03,rs04,rs05,rs06,rs07,rs08,rs09,rs10,rs11,rs12,rs13,rs14,rs15,rs16) VALUES ('%s',%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d)" % (tsample,bucket,rs[1],rs[2],rs[3],rs[4],rs[5],rs[6],rs[7],rs[8],rs[9],rs[10],rs[11],rs[12],rs[13],rs[14],rs[15],rs[16])
+	if args.v:
+		print qry
 
-#  wait for a few sec
-time.sleep(2)
+	if not args.debug:
+		cur.execute(qry)
+		conn.commit()
+
+	#  wait for a few sec
+	time.sleep(5)
+
