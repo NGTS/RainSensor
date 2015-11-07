@@ -4,7 +4,7 @@ from collections import defaultdict
 import RPi.GPIO as g
 
 class RainSensor(object):
-    def get_fortune(self, name):
+    def get_rain(self, name):
 		rs=defaultdict(list)
 		g.setmode(g.BCM)
 		gpio_nums=[18,23,4,17,27,22,10,9,11,5,6,13,19,26,20,21]
