@@ -67,9 +67,9 @@ def plotRainSensor(tlim):
 	ax.set_xlim(-24,0)
 	ax.set_ylim(0,1.2)
 	for i in rs:
-		ax.plot(times,np.array(rs[i])+(i*0.01),'-')
+		ax.plot(times,np.abs((np.array(rs[i])-1)+(i*0.0025)),'-')
 	ax.set_xlabel('Hours ago')
-	ax.set_ylabel('Rain (0=Wet, 1=Dry)')
+	ax.set_ylabel('Rain (0=DRY, 1=WET)')
 	pl.savefig('/home/ops/ngts/prism/monitor/img/rpi_rain_sensor.png',bbox_inches='tight')
 
 
