@@ -1,3 +1,4 @@
+#!/usr/local/python/bin/python
 import pymysql
 from collections import defaultdict
 
@@ -6,7 +7,7 @@ def checkRainSensor():
 	cur=conn.cursor()
 	rs=defaultdict(list)
 	qry="SELECT * FROM rpi_rain_sensor"
-	cur.execut(qry)
+	cur.execute(qry)
 	for row in cur:
 		rs[1].append(row[2])
 		rs[2].append(row[3])
