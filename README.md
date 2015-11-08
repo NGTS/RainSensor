@@ -1,4 +1,4 @@
-Raspberry Pi Rain Sensor
+Raspberry Pi Rain Sensor <br/>
 
-rainSensor-client - ngts-par-ds side logging script
-rainSensor-server - raspberry pi side GPIO server
+rainSensor-client - ngts-par-ds side logging script <br/>
+rainSensor-server - raspberry pi side GPIO server <br/>
