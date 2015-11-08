@@ -30,7 +30,7 @@ def getLastXhrs(tlim):
 	cur=conn.cursor()
 	rs=defaultdict(list)
 	times=[]
-	qry="SELECT (UNIX_TIMESTAMP(tsample)-UNIX_TIMESTAMP(UTC_TIMESTAMP()))/3600.0 AS trel,rs01,rs02,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03 FROM rpi_rain_sensor HAVING trel>-%d" % (tlim)
+	qry="SELECT (UNIX_TIMESTAMP(tsample)-UNIX_TIMESTAMP(UTC_TIMESTAMP()))/3600.0 AS trel,rs01,rs02,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03 FROM rpi_rain_sensor" #HAVING trel>-%d" % (tlim)
 	cur.execute(qry)
 	for row in cur:
 		times.append(row[0])
