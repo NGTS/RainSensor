@@ -4,6 +4,7 @@ from collections import defaultdict
 from astropy.time import Time
 import matplotlib.pyplot as pl
 import argparse as ap
+import numpy as np
 
 colours=[(206/250.,200/250.,170/250.),
 		(203/250.,81/250.,205/250.),
@@ -66,7 +67,7 @@ def plotRainSensor(tlim):
 	ax.set_xlim(-24,0)
 	ax.set_ylim(0,1.2)
 	for i in rs:
-		ax.plot(times,rs[i]+(i*0.01),'-')
+		ax.plot(times,np.array(rs[i])+(i*0.01),'-')
 	ax.set_xlabel('Hours ago')
 	ax.set_ylabel('Rain (0=Wet, 1=Dry)')
 	pl.savefig('/home/ops/ngts/prism/monitor/img/rpi_rain_sensor.png',bbox_inches='tight')
