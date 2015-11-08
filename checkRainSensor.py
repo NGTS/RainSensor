@@ -30,7 +30,7 @@ def getLastXhrs(tlim):
 	cur=conn.cursor()
 	rs=defaultdict(list)
 	times=[]
-	qry="SELECT (UNIX_TIMESTAMP(tsample)-UNIX_TIMESTAMP(UTC_TIMESTAMP()))/3600.0 AS trel,rs01,rs02,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03,rs03 FROM rpi_rain_sensor" #HAVING trel>-%d" % (tlim)
+	qry="SELECT (bucket-UNIX_TIMESTAMP())/3600.0 AS trel,rs01,rs02,rs03,rs04,rs05,rs06,rs07,rs08,rs09,rs10,rs11,rs12,rs13,rs14,rs15,rs16 FROM rpi_rain_sensor HAVING trel>-%d" % (tlim)
 	cur.execute(qry)
 	for row in cur:
 		times.append(row[0])
@@ -78,3 +78,6 @@ if __name__=="__main__":
 		checkRainSensor(args.check)
 	if args.plot:
 		plotRainSensor(args.plot)
+
+
+		
