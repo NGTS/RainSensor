@@ -64,7 +64,7 @@ def plotRainSensor(tlim):
 	fig=pl.figure(1,figsize=(5,5))
 	ax=pl.subplot2grid((5,4),(0,0),colspan=5,rowspan=4)
 	ax.set_color_cycle(colours)
-	ax.set_xlim(-24,5)
+	ax.set_xlim(-24,5.1)
 	ax.set_ylim(0,1.1)
 	for i in rs:
 		ax.plot(times,np.abs((np.array(rs[i])-1)+(i*0.003)),'-')
