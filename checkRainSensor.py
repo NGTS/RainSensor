@@ -64,13 +64,13 @@ def plotRainSensor(tlim):
 	fig=pl.figure(1,figsize=(5,5))
 	ax=pl.subplot2grid((5,4),(0,0),colspan=5,rowspan=4)
 	ax.set_color_cycle(colours)
-	ax.set_xlim(-24,0)
+	ax.set_xlim(-24,5)
 	ax.set_ylim(0,1.1)
 	for i in rs:
 		ax.plot(times,np.abs((np.array(rs[i])-1)+(i*0.003)),'-')
 	ax.set_xlabel('Hours ago')
 	ax.set_ylabel('Rain (0=DRY, 1=WET)')
-	pl.rc('legend',**{'fontsize':10})
+	pl.rc('legend',**{'fontsize':8})
 	pl.legend(("01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16"),loc='upper right',numpoints=1)
 	pl.savefig('/home/ops/ngts/prism/monitor/img/rpi_rain_sensor.png',bbox_inches='tight')
 
