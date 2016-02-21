@@ -28,7 +28,7 @@ class RainSensor(object):
 		return self.rs
 
 # make a Pyro daemon
-daemon = Pyro4.Daemon("10.2.5.107")                
+daemon = Pyro4.Daemon("10.2.5.32")                
 rain_sensor=RainSensor()
 # find the name server
 ns = Pyro4.locateNS()      
