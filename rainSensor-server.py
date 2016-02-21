@@ -27,16 +27,17 @@ class RainSensor(object):
 			self.rs[(i+1)]=g.input(gpio_nums[i])
 		return self.rs
 
-# make a Pyro daemon
-daemon = Pyro4.Daemon("10.2.5.32")                
-rain_sensor=RainSensor()
-# find the name server
-ns = Pyro4.locateNS()      
-# register the greeting maker as a Pyro object            
-uri = daemon.register(RainSensor)   
-# register the object with a name in the name server
-ns.register("example.sensor", uri)   
-
-print("Ready.")
-# start the event loop of the server to wait for calls
-daemon.requestLoop(loopCondition=rain_sensor.running)
+if __name__ == '__main__':
+	# make a Pyro daemon
+	daemon = Pyro4.Daemon("10.2.5.32")                
+	rain_sensor=RainSensor()
+	# find the name server
+	ns = Pyro4.locateNS()      
+	# register the greeting maker as a Pyro object            
+	uri = daemon.register(RainSensor)   
+	# register the object with a name in the name server
+	ns.register("example.sensor", uri)   
+	
+	print("Ready.")
+	# start the event loop of the server to wait for calls
+	daemon.requestLoop(loopCondition=rain_sensor.running)
