@@ -5,6 +5,9 @@
 import Pyro4
 from collections import defaultdict
 import RPi.GPIO as g
+import time
+
+SLEEP_TIME = 5
 
 class RainSensor(object):
     
@@ -27,17 +30,46 @@ class RainSensor(object):
 			self.rs[(i+1)]=g.input(gpio_nums[i])
 		return self.rs
 
+def update_rain_info(sensor, time_value):
+	host = 'ds'
+	db = 'ngts_ops'
+	user = 'ops'
+
+	rain_values = sensor.get_rain('test')
+	bucket=(int(time_value)/60)*60
+	tsample=datetime.utcnow().isoformat().replace('T',' ')[:-7] # remove microseconds
+
+	qry= "REPLACE INTO rpi_rain_sensor (tsample,bucket,rs01,rs02,rs03,rs04,rs05,rs06,rs07,rs08,rs09,rs10,rs11,rs12,rs13,rs14,rs15,rs16) VALUES ('%s',%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d)"
+	params = (tsample,bucket,rs[1],rs[2],rs[3],rs[4],rs[5],rs[6],rs[7],rs[8],rs[9],rs[10],rs[11],rs[12],rs[13],rs[14],rs[15],rs[16])
+
+	with pymysql.connect(host=host, db=db, user=user) as cursor:
+		cursor.execute(qry, params)
+
+def rain_sensor_watcher(sensor):
+	# Connect to central hub
+	hub = Pyro4.Proxy('PYRONAME:central.hub')
+	try:
+		hub.startThread('Rain Sensors')
+	except Exception as err:
+		print('Cannot connect to central hub')
+		raise
+
+	while True:
+		# Store this time value for updating
+		time_value = time.time()
+
+		# Inform the central hub that it's working
+		hub.update_rain(time_value)
+
+		# Upload rain info to the database
+		update_rain_info(sensor, time_value)
+
+		time.sleep(SLEEP_TIME)
+
+
+
 if __name__ == '__main__':
-	# make a Pyro daemon
-	daemon = Pyro4.Daemon("10.2.5.32")                
-	rain_sensor=RainSensor()
-	# find the name server
-	ns = Pyro4.locateNS()      
-	# register the greeting maker as a Pyro object            
-	uri = daemon.register(RainSensor)   
-	# register the object with a name in the name server
-	ns.register("example.sensor", uri)   
-	
-	print("Ready.")
-	# start the event loop of the server to wait for calls
-	daemon.requestLoop(loopCondition=rain_sensor.running)
+	sensor = RainSensor()
+	rain_sensor_watcher(sensor)
+
+# vim: set noexpandtab ts=4:
