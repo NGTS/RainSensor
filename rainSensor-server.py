@@ -46,6 +46,7 @@ def update_rain_info(sensor, time_value):
 
 	with pymysql.connect(host=host, db=db, user=user) as cursor:
 		cursor.execute(qry, params)
+		# implicit commit
 
 def rain_sensor_watcher(sensor):
 	# Connect to central hub
