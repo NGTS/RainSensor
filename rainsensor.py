@@ -43,6 +43,7 @@ def update_rain_info(sensor, time_value):
 	db = 'ngts_ops'
 	user = 'ops'
 
+	logger.debug('Fetching rain sensor measurements')
 	rs = sensor.get_rain('test')
 	bucket=(int(time_value)/60)*60
 	tsample=datetime.datetime.utcnow().isoformat().replace('T',' ')[:-7] # remove microseconds
@@ -51,17 +52,30 @@ def update_rain_info(sensor, time_value):
 	params = (tsample,bucket,rs[1],rs[2],rs[3],rs[4],rs[5],rs[6],rs[7],rs[8],rs[9],rs[10],rs[11],rs[12],rs[13],rs[14],rs[15],rs[16])
 
 	with pymysql.connect(host=host, db=db, user=user) as cursor:
-		logger.debug('query: %s : %s', qry, params)
+		logger.debug('Updating database: %s : %s', qry, params)
 		cursor.execute(qry, params)
 		# implicit commit
 
-def rain_sensor_watcher(sensor):
+class NullHub(object):
+	'''
+	Null object to wrap the lack of a central hub
+	'''
+	def startThread(self, name): pass
+	def update_rain(self, time_value): pass
+
+def rain_sensor_watcher(sensor, communicate_with_hub):
 	# Connect to central hub
-	hub = Pyro4.Proxy('PYRONAME:central.hub')
+	if communicate_with_hub:
+		logger.debug('Connecting to central hub')
+		hub = Pyro4.Proxy('PYRONAME:central.hub')
+	else:
+		logger.debug('Not communicating with central hub')
+		hub = NullHub()
+
 	try:
 		hub.startThread('Rain Sensors')
 	except Exception as err:
-		print('Cannot connect to central hub')
+		logger.exception('Cannot connect to central hub')
 		raise
 
 	while True:
@@ -81,14 +95,14 @@ def rain_sensor_watcher(sensor):
 def get_args():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-v', '--verbose', action='store_true')
+	parser.add_argument('--nohub', action='store_true', help='Do not communicate with central hub server')
 	return parser.parse_args()
 
 if __name__ == '__main__':
 	args = get_args()
 	if args.verbose:
 		logger.setLevel('DEBUG')
-	logger.debug('Test')
 	sensor = RainSensor()
-	rain_sensor_watcher(sensor)
+	rain_sensor_watcher(sensor, communicate_with_hub=not args.nohub)
 
 # vim: set noexpandtab ts=4 sw=4:
