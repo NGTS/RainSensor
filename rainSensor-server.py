@@ -75,4 +75,4 @@ if __name__ == '__main__':
 	sensor = RainSensor()
 	rain_sensor_watcher(sensor)
 
-# vim: set noexpandtab ts=4:
+# vim: set noexpandtab ts=4 sw=4:
