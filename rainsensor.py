@@ -8,8 +8,14 @@ import RPi.GPIO as g
 import time
 import datetime
 import pymysql
+import argparse
+import logging
 
 SLEEP_TIME = 5
+
+logging.basicConfig(
+    level='INFO', format='%(asctime)s : %(message)s')
+logger = logging.getLogger(__name__)
 
 class RainSensor(object):
     
@@ -45,6 +51,7 @@ def update_rain_info(sensor, time_value):
 	params = (tsample,bucket,rs[1],rs[2],rs[3],rs[4],rs[5],rs[6],rs[7],rs[8],rs[9],rs[10],rs[11],rs[12],rs[13],rs[14],rs[15],rs[16])
 
 	with pymysql.connect(host=host, db=db, user=user) as cursor:
+		logger.debug('query: %s : %s', qry, params)
 		cursor.execute(qry, params)
 		# implicit commit
 
@@ -67,11 +74,20 @@ def rain_sensor_watcher(sensor):
 		# Upload rain info to the database
 		update_rain_info(sensor, time_value)
 
+		logger.debug('Sleeping for %s seconds', SLEEP_TIME)
 		time.sleep(SLEEP_TIME)
 
 
+def get_args():
+	parser = argparse.ArgumentParser()
+	parser.add_argument('-v', '--verbose', action='store_true')
+	return parser.parse_args()
 
 if __name__ == '__main__':
+	args = get_args()
+	if args.verbose:
+		logger.setLevel('DEBUG')
+	logger.debug('Test')
 	sensor = RainSensor()
 	rain_sensor_watcher(sensor)
 
