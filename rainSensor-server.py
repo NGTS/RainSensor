@@ -37,7 +37,7 @@ def update_rain_info(sensor, time_value):
 	db = 'ngts_ops'
 	user = 'ops'
 
-	rain_values = sensor.get_rain('test')
+	rs = sensor.get_rain('test')
 	bucket=(int(time_value)/60)*60
 	tsample=datetime.datetime.utcnow().isoformat().replace('T',' ')[:-7] # remove microseconds
 
