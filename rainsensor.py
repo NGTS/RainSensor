@@ -73,11 +73,13 @@ def rain_sensor_watcher(sensor, communicate_with_hub):
 		hub = NullHub()
 
 	try:
+		logger.debug('Starting rain sensors thread')
 		hub.startThread('Rain Sensors')
 	except Exception as err:
 		logger.exception('Cannot connect to central hub')
 		raise
 
+	logger.debug('Entering main loop')
 	while True:
 		# Store this time value for updating
 		time_value = time.time()
