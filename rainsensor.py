@@ -56,7 +56,7 @@ def update_rain_info(sensor, time_value):
 		cursor.execute(qry, params)
 		# implicit commit
 
-def rain_sensor_watcher(sensor, communicate_with_hub):
+def rain_sensor_watcher(sensor):
 	# Connect to central hub
 	logger.debug('Connecting to central hub')
 	hub = Pyro4.Proxy('PYRONAME:central.hub')
