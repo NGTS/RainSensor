@@ -65,7 +65,7 @@ def rain_sensor_watcher(sensor):
 		# Inform the central hub that it's working
 		hub.report_in('rain_sensor')
 		# Upload rain info to the database
-		update_rain_info(sensor, time_value)
+		update_rain_info(sensor, time.time())
 		logger.debug('Sleeping for %s seconds', SLEEP_TIME)
 		time.sleep(SLEEP_TIME)
 
