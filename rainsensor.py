@@ -56,40 +56,16 @@ def update_rain_info(sensor, time_value):
 		cursor.execute(qry, params)
 		# implicit commit
 
-class NullHub(object):
-	'''
-	Null object to wrap the lack of a central hub
-	'''
-	def startThread(self, name): pass
-	def update_rain(self, time_value): pass
-
 def rain_sensor_watcher(sensor, communicate_with_hub):
 	# Connect to central hub
-	if communicate_with_hub:
-		logger.debug('Connecting to central hub')
-		hub = Pyro4.Proxy('PYRONAME:central.hub')
-	else:
-		logger.debug('Not communicating with central hub')
-		hub = NullHub()
-
-	try:
-		logger.debug('Starting rain sensors thread')
-		hub.startThread('Rain Sensors')
-	except Exception as err:
-		logger.exception('Cannot connect to central hub')
-		raise
-
+	logger.debug('Connecting to central hub')
+	hub = Pyro4.Proxy('PYRONAME:central.hub')
 	logger.debug('Entering main loop')
 	while True:
-		# Store this time value for updating
-		time_value = time.time()
-
 		# Inform the central hub that it's working
-		hub.update_rain(time_value)
-
+		hub.report_in('rain_sensor')
 		# Upload rain info to the database
 		update_rain_info(sensor, time_value)
-
 		logger.debug('Sleeping for %s seconds', SLEEP_TIME)
 		time.sleep(SLEEP_TIME)
 
@@ -97,7 +73,6 @@ def rain_sensor_watcher(sensor, communicate_with_hub):
 def get_args():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-v', '--verbose', action='store_true')
-	parser.add_argument('--nohub', action='store_true', help='Do not communicate with central hub server')
 	return parser.parse_args()
 
 if __name__ == '__main__':
@@ -105,6 +80,6 @@ if __name__ == '__main__':
 	if args.verbose:
 		logger.setLevel('DEBUG')
 	sensor = RainSensor()
-	rain_sensor_watcher(sensor, communicate_with_hub=not args.nohub)
+	rain_sensor_watcher(sensor)
 
 # vim: set noexpandtab ts=4 sw=4:
