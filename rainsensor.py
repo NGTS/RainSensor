@@ -39,7 +39,7 @@ class RainSensor(object):
         return self.rs
 
 def update_rain_info(sensor, time_value):
-    host = 'ds'
+    host = '10.2.5.32'
     db = 'ngts_ops'
     user = 'ops'
 
