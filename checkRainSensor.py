@@ -13,6 +13,8 @@ import numpy as np
 
 DB_HOST = '10.2.5.32'
 DB_DATABASE = 'ngts_ops'
+DB_USER = 'ops'
+
 colours = [(206/250., 200/250., 170/250.),
            (203/250., 81/250., 205/250.),
            (213/250., 89/250., 52/250.),
@@ -44,7 +46,7 @@ def getLastXhrs(tlim):
     """
     Grab the last X hours of rain sensor data
     """
-    conn = pymysql.connect(host=DB_HOST, db=DB_DATABASE)
+    conn = pymysql.connect(host=DB_HOST, db=DB_DATABASE, user=DB_USER)
     cur = conn.cursor()
     rs = defaultdict(list)
     times = []
