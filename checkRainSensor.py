@@ -11,7 +11,7 @@ import numpy as np
 # pylint: disable = invalid-name
 # pylint: disable = redefined-outer-name
 
-DB_HOST = 'ngtsdb'
+DB_HOST = '10.2.5.32'
 DB_DATABASE = 'ngts_ops'
 colours = [(206/250., 200/250., 170/250.),
            (203/250., 81/250., 205/250.),
@@ -112,6 +112,6 @@ if __name__ == "__main__":
     if args.check:
         checkRainSensor(args.check)
     if args.plot:
-        outdir = "/srv/www/ngts/monitor/monitor/static"
+        outdir = "/srv/www/ngts/monitor/flask-monitor/monitor/static"
         plotRainSensor(outdir, args.plot)
 
