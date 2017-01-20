@@ -5,6 +5,8 @@ Plot the current status from the RPi rain sensors
 import argparse as ap
 from collections import defaultdict
 import pymysql
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as pl
 import numpy as np
 
