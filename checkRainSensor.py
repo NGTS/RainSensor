@@ -4,6 +4,7 @@ Plot the current status from the RPi rain sensors
 """
 import argparse as ap
 from collections import defaultdict
+from datetime import datetime
 import pymysql
 import matplotlib
 matplotlib.use('Agg')
@@ -101,7 +102,7 @@ def plotRainSensor(outdir, tlim):
     ax.set_ylim(0, 1.1)
     for i in rs:
         ax.plot(times, np.abs((np.array(rs[i])-1)+(i*0.003)), '-')
-    ax.set_xlabel('Hours ago')
+    ax.set_xlabel('Hours since {}'.format(datetime.utcnow().replace(microsecond=0)))
     ax.set_ylabel('Rain (0=DRY, 1=WET)')
     pl.rc('legend', **{'fontsize':9})
     pl.legend(("01", "02", "03", "04", "05", "06", "07", "08",
