@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/local/python/bin/python
 """
 Plot the current status from the RPi rain sensors
 """
