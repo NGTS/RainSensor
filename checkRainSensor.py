@@ -67,7 +67,7 @@ def plotRainSensor(outdir, tlim):
               loc='upper right', numpoints=1)
     pl.savefig('{}/rpi_rain_sensor.png'.format(outdir),
                bbox_inches='tight')
-)
+
 if __name__ == "__main__":
     outdir = "/srv/www/ngts/monitor/flask-monitor/monitor/static"
     plotRainSensor(outdir, 24)
