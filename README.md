@@ -1,16 +1,5 @@
 ## Raspberry Pi Rain Sensor
 
-* checkRainSensor   - script to calibrate and poll the rain sensors
-* rainsensor.py - script for running the rain sensor.
+```rainsensor.py``` runs on the Raspberry Pi, it reads the sensors and logs the information in the database. It also checks in with centralHub.
 
-## Usage
-
-Command line options for `rainsensor.py`:
-
-* `-v/--verbose`: verbose mode
-* `--nohub`: do not connect to Pyro monitor server
-
-Commands line aoptions for `checkRainSensor.py`
-
-* `--check X`: check the rain sensor calibration for the past X hours
-* `--plot X`: plot the rain sensor data for the past X hours
+```checkRainSensor.py``` runs on cron on the webserver and plots the rain values. 0=Dry and 1=Wet

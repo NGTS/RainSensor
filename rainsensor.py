@@ -36,11 +36,9 @@ class RainSensor(object):
         """Returns false if the daemon should be terminated"""
         return self._running
 
-    def get_rain(self, name):
+    def get_rain(self):
         """Returns the rain sensor values in a dict"""
-        gpio_nums = [18, 23, 4, 17, 27,
-                     22, 10, 9, 11, 5, 6,
-                     13, 19, 26, 20, 21]
+        gpio_nums = [2, 3]
         for i in gpio_nums:
             g.setup(i, g.IN)
         for i in range(0, len(gpio_nums)):
@@ -55,26 +53,21 @@ def update_rain_info(sensor, time_value):
     db = 'ngts_ops'
     user = 'ops'
     logger.debug('Fetching rain sensor measurements')
-    rs = sensor.get_rain('test')
+    rs = sensor.get_rain()
     bucket = (int(time_value)/60)*60
     tsample = datetime.datetime.utcnow().isoformat().replace('T', ' ')[:-7] # remove microseconds
 
     qry = """
-         REPLACE INTO rpi_rain_sensor
-         (tsample, bucket, rs01, rs02, rs03, rs04, rs05,
-         rs06, rs07, rs08, rs09, rs10, rs11, rs12, rs13,
-         rs14, rs15, rs16)
+         REPLACE INTO rpi_rg11_rain_sensors
+         (tsample, bucket, rs01, rs02, rs03, rs04, rs05)
          VALUES
-         (%s, %s, %s, %s, %s, %s, %s, %s, %s,
-         %s, %s, %s, %s, %s, %s, %s ,%s, %s)
+         (%s, %s, %s, %s, %s, %s, %s)
          """
-    params = (tsample, bucket, rs[1], rs[2], rs[3], rs[4], rs[5], rs[6],
-              rs[7], rs[8], rs[9], rs[10], rs[11], rs[12], rs[13], rs[14],
-              rs[15], rs[16])
+    # forcing final three sensors to be 0 for now
+    params = (tsample, bucket, rs[1], rs[2], 0, 0, 0)
     with pymysql.connect(host=host, db=db, user=user) as cursor:
         logger.debug('Updating database: %s : %s', qry, params)
         cursor.execute(qry, params)
-        # implicit commit
 
 def rain_sensor_watcher(sensor):
     """
@@ -92,7 +85,6 @@ def rain_sensor_watcher(sensor):
         logger.debug('Sleeping for %s seconds', SLEEP_TIME)
         time.sleep(SLEEP_TIME)
 
-
 def argParse():
     """
     Parse the command line arguments
@@ -107,4 +99,3 @@ if __name__ == '__main__':
         logger.setLevel('DEBUG')
     sensor = RainSensor()
     rain_sensor_watcher(sensor)
-
