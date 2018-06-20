@@ -55,11 +55,11 @@ def plotRainSensor(outdir, tlim):
     times, rs = getLastXhrs(tlim)
     pl.figure(1, figsize=(5, 5))
     ax = pl.subplot2grid((5, 4), (0, 0), colspan=5, rowspan=4)
-    ax.set_color_cycle(colours)
+    ax.set_prop_cycle(colours)
     ax.set_xlim(-24, 5.2)
     ax.set_ylim(0, 1.1)
     for i in rs:
-        ax.plot(times, np.abs((np.array(rs[i])-1)+(i*0.003)), '-')
+        ax.plot(times, rs[i]+(i*0.003), '-')
     ax.set_xlabel('Hours since {}'.format(datetime.utcnow().replace(microsecond=0)))
     ax.set_ylabel('Rain (0=DRY, 1=WET)')
     pl.rc('legend', **{'fontsize':9})
