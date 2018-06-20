@@ -35,7 +35,7 @@ def getLastXhrs(tlim):
         FROM rpi_rg11_rain_sensors
         HAVING trel>%s
         """
-    qry_args = (float(tlim)*-1), )
+    qry_args = (float(tlim)*-1, )
     with pymysql.connect(host=DB_HOST, db=DB_DATABASE, user=DB_USER) as cur:
         cur.execute(qry, qry_args)
         results = cur.fetchall()
@@ -67,7 +67,7 @@ def plotRainSensor(outdir, tlim):
               loc='upper right', numpoints=1)
     pl.savefig('{}/rpi_rain_sensor.png'.format(outdir),
                bbox_inches='tight')
-
+)
 if __name__ == "__main__":
     outdir = "/srv/www/ngts/monitor/flask-monitor/monitor/static"
     plotRainSensor(outdir, 24)
