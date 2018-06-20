@@ -58,7 +58,7 @@ def plotRainSensor(outdir, tlim):
     ax.set_xlim(-24, 5.2)
     ax.set_ylim(0, 1.1)
     for i, j in enumerate(rs):
-        ax.plot(times, rs[i]+(i*0.003), '-', color=colours[j])
+        ax.plot(times, rs[j]+(i*0.003), '-', color=colours[i])
     ax.set_xlabel('Hours since {}'.format(datetime.utcnow().replace(microsecond=0)))
     ax.set_ylabel('Rain (0=DRY, 1=WET)')
     pl.rc('legend', **{'fontsize':9})
