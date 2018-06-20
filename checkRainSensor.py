@@ -27,24 +27,25 @@ def getLastXhrs(tlim):
     """
     Grab the last X hours of rain sensor data
     """
-    conn = pymysql.connect(host=DB_HOST, db=DB_DATABASE, user=DB_USER)
-    cur = conn.cursor()
     rs = defaultdict(list)
     times = []
     qry = """
         SELECT (bucket-UNIX_TIMESTAMP())/3600.0 AS trel,
         rs01, rs02, rs03, rs04, rs05
         FROM rpi_rg11_rain_sensors
-        HAVING trel>-{}
-        """.format(tlim)
-    cur.execute(qry)
-    for row in cur:
-        times.append(row[0])
-        rs[1].append(row[1])
-        rs[2].append(row[2])
-        rs[3].append(row[3])
-        rs[4].append(row[4])
-        rs[5].append(row[5])
+        HAVING trel>%s
+        """
+    qry_args = (float(tlim)*-1), )
+    with pymysql.connect(host=DB_HOST, db=DB_DATABASE, user=DB_USER) as cur:
+        cur.execute(qry, qry_args)
+        results = cur.fetchall()
+    for row in results:
+        times.append(float(row[0]))
+        rs[1].append(int(row[1]))
+        rs[2].append(int(row[2]))
+        rs[3].append(int(row[3]))
+        rs[4].append(int(row[4]))
+        rs[5].append(int(row[5]))
     return times, rs
 
 def plotRainSensor(outdir, tlim):
