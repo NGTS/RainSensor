@@ -31,6 +31,12 @@ class RainSensor(object):
         self._running = True
         self.rs = defaultdict(list)
         g.setmode(g.BCM)
+        self.gpio_nums = [2, 3, 4, 5, 6]
+        for i in self.gpio_nums:
+            if i == 2 or i == 3:
+                g.setup(i, g.IN)
+            else:
+                g.setup(i, g.IN, pull_up_down=g.PUD_UP)
 
     def running(self):
         """Returns false if the daemon should be terminated"""
@@ -38,11 +44,9 @@ class RainSensor(object):
 
     def get_rain(self):
         """Returns the rain sensor values in a dict"""
-        gpio_nums = [2, 3, 4, 5, 6]
-        for i in gpio_nums:
-            g.setup(i, g.IN)
-        for i in range(0, len(gpio_nums)):
-            self.rs[(i+1)] = g.input(gpio_nums[i])
+        for i in range(0, len(self.gpio_nums)):
+            self.rs[(i+1)] = g.input(self.gpio_nums[i])
+            print(self.rs)
         return self.rs
 
 def update_rain_info(sensor, time_value):
