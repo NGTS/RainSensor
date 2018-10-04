@@ -38,7 +38,7 @@ class RainSensor(object):
 
     def get_rain(self):
         """Returns the rain sensor values in a dict"""
-        gpio_nums = [2, 3]
+        gpio_nums = [2, 3, 4, 5, 6]
         for i in gpio_nums:
             g.setup(i, g.IN)
         for i in range(0, len(gpio_nums)):
@@ -64,7 +64,7 @@ def update_rain_info(sensor, time_value):
          (%s, %s, %s, %s, %s, %s, %s)
          """
     # forcing final three sensors to be 0 for now
-    params = (tsample, bucket, rs[1], rs[2], 0, 0, 0)
+    params = (tsample, bucket, rs[1], rs[2], rs[3], rs[4], rs[5])
     with pymysql.connect(host=host, db=db, user=user) as cursor:
         logger.debug('Updating database: %s : %s', qry, params)
         cursor.execute(qry, params)
