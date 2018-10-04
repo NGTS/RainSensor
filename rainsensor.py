@@ -46,7 +46,7 @@ class RainSensor(object):
         """Returns the rain sensor values in a dict"""
         for i in range(0, len(self.gpio_nums)):
             self.rs[(i+1)] = g.input(self.gpio_nums[i])
-            print(self.rs)
+        print(self.rs)
         return self.rs
 
 def update_rain_info(sensor, time_value):
