@@ -69,4 +69,4 @@ def plotRainSensor(outdir, tlim):
 
 if __name__ == "__main__":
     outdir = "/srv/www/ngts/monitor/flask-monitor/monitor/static"
-    plotRainSensor(outdir, -24)
+    plotRainSensor(outdir, 24)
